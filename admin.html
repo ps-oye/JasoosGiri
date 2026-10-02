@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0b12">
+  <title>Admin | Mystery Universe</title>
+  <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="./index.html" aria-label="Mystery Universe home">
+      <span class="brand-mark">MU</span>
+      <span>
+        <strong>MYSTERY</strong>
+        <small>UNIVERSE</small>
+      </span>
+    </a>
+    <div class="header-actions">
+      <a class="header-link" href="./index.html">Public Site</a>
+      <button id="logout-btn" class="ghost-btn hidden" type="button">Sign out</button>
+    </div>
+  </header>
+
+  <main class="page-shell admin-shell">
+    <section id="auth-view" class="auth-card reveal">
+      <p class="eyebrow">RESTRICTED // CASE ADMIN</p>
+      <h1>Enter the archive.</h1>
+      <p>Sign in with the Supabase admin account configured for this site.</p>
+      <form id="login-form" class="stack-form">
+        <label>Email<input id="login-email" type="email" autocomplete="username" required></label>
+        <label>Password<input id="login-password" type="password" autocomplete="current-password" required></label>
+        <button class="primary-btn" type="submit">AUTHENTICATE</button>
+        <p id="login-message" class="form-message" role="status"></p>
+      </form>
+    </section>
+
+    <section id="admin-view" class="hidden">
+      <div class="admin-heading">
+        <div>
+          <p class="eyebrow">CONTROL ROOM</p>
+          <h1>Case composer</h1>
+          <p>Create a mystery by pasting a versioned JSON document. The renderer is schema-driven, so the form does not need to know your case sections.</p>
+        </div>
+        <div class="admin-stats">
+          <span>Signed in as</span>
+          <strong id="admin-user-email">—</strong>
+        </div>
+      </div>
+
+      <div class="admin-layout">
+        <section class="panel">
+          <div class="panel-head"><h2>Case metadata</h2><span class="micro-label">required</span></div>
+          <div class="form-grid two">
+            <label>Case number<input id="case-number" type="number" min="1" step="1" placeholder="001" required></label>
+            <label>Title<input id="case-title" type="text" maxlength="160" placeholder="The Missing Necklace" required></label>
+            <label>Slug<input id="case-slug" type="text" maxlength="120" placeholder="the-missing-necklace" required></label>
+            <label>Difficulty
+              <select id="case-difficulty">
+                <option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option><option value="expert">Expert</option>
+              </select>
+            </label>
+            <label>Status
+              <select id="case-status-select">
+                <option value="draft" selected>Draft</option><option value="published">Published</option>
+              </select>
+            </label>
+            <label>YouTube answer URL<input id="youtube-url" type="url" placeholder="https://www.youtube.com/watch?v=…"></label>
+          </div>
+          <label>Case image
+            <input id="case-image" type="file" accept="image/png,image/jpeg,image/webp,image/avif">
+            <span class="help-text">The browser resizes the image to max 1600px and stores it as compressed WebP before upload.</span>
+          </label>
+          <div id="image-preview" class="upload-preview hidden"></div>
+          <input id="edit-id" type="hidden">
+          <input id="existing-image-path" type="hidden">
+        </section>
+
+        <section class="panel">
+          <div class="panel-head"><h2>Case JSON</h2><span id="json-state" class="json-state invalid">not validated</span></div>
+          <p class="help-text">Paste the JSON generated from the reference template. JSON must include <code>schemaVersion</code> and <code>sections</code>.</p>
+          <textarea id="case-json" class="code-input" spellcheck="false" placeholder="Paste case JSON here…"></textarea>
+          <div class="json-actions">
+            <button id="validate-btn" class="secondary-btn" type="button">Validate JSON</button>
+            <button id="preview-btn" class="secondary-btn" type="button">Preview</button>
+            <button id="template-btn" class="ghost-btn" type="button">Load template</button>
+          </div>
+          <pre id="json-errors" class="json-errors hidden"></pre>
+        </section>
+
+        <section class="panel preview-panel">
+          <div class="panel-head"><h2>Live preview</h2><span class="micro-label">same renderer as public case page</span></div>
+          <div id="admin-preview" class="case-preview"></div>
+        </section>
+      </div>
+
+      <div class="admin-toolbar">
+        <div id="save-message" class="form-message" role="status"></div>
+        <div class="toolbar-actions">
+          <button id="new-case-btn" class="ghost-btn" type="button">New case</button>
+          <button id="save-btn" class="primary-btn" type="button">Save case</button>
+        </div>
+      </div>
+
+      <section class="panel">
+        <div class="panel-head"><h2>Existing published / draft cases</h2><span class="micro-label">one-table archive</span></div>
+        <div id="admin-case-list" class="admin-case-list"></div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer"><span>MYSTERY UNIVERSE</span><span>ADMIN CONTROL ROOM</span></footer>
+
+  <script src="./config.js"></script>
+  <script type="module" src="./assets/js/admin.js"></script>
+</body>
+</html>

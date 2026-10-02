@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "key": "case_brief",
+      "name": "The Case",
+      "description": "A concise, atmospheric introduction to the mystery.",
+      "type": "text"
+    },
+    {
+      "key": "the_scene",
+      "name": "The Crime Scene",
+      "description": [
+        "Observation one.",
+        "Observation two.",
+        "Observation three."
+      ],
+      "type": "bullets"
+    },
+    {
+      "key": "suspects",
+      "name": "The Suspects",
+      "description": [
+        "Suspect A — role and useful context.",
+        "Suspect B — role and useful context.",
+        "Suspect C — role and useful context."
+      ],
+      "type": "suspects"
+    },
+    {
+      "key": "evidence",
+      "name": "Evidence",
+      "description": {
+        "CCTV": "What was recorded.",
+        "Physical clue": "What was found.",
+        "Statement": "A useful witness statement."
+      },
+      "type": "evidence"
+    },
+    {
+      "key": "timeline",
+      "name": "Timeline",
+      "description": [
+        "09:10 PM — Event one.",
+        "09:30 PM — Event two.",
+        "09:45 PM — Event three."
+      ],
+      "type": "timeline"
+    },
+    {
+      "key": "mission",
+      "name": "Your Mission",
+      "description": "State precisely what the detective is expected to work out.",
+      "type": "mission"
+    }
+  ],
+  "guessOptions": [
+    { "id": "suspect-a", "name": "Suspect A" },
+    { "id": "suspect-b", "name": "Suspect B" },
+    { "id": "suspect-c", "name": "Suspect C" },
+    { "id": "suspect-d", "name": "Suspect D" }
+  ]
+}
