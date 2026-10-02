@@ -111,7 +111,7 @@ async function loadCase() {
     return;
   }
 
-  document.title = `Case #${String(data.case_number).padStart(3, "0")} — ${data.title} | Mystery Universe`;
+  document.title = `Case #${String(data.case_number).padStart(3, "0")} — ${data.title} | JasoosGiri`;
   statusBanner.classList.remove("hidden");
   statusBanner.innerHTML = `CASE #${escapeHtml(String(data.case_number).padStart(3, "0"))} <span>•</span> ${escapeHtml(String(data.difficulty).toUpperCase())} <span>•</span> ACTIVE INVESTIGATION`;
 

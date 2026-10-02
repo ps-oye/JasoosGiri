@@ -6,6 +6,8 @@ const empty = document.querySelector("#empty-state");
 const count = document.querySelector("#result-count");
 const terminalCount = document.querySelector("#terminal-count");
 const search = document.querySelector("#mystery-search");
+const archiveHead = document.querySelector(".archive-head");
+const siteHeader = document.querySelector(".site-header");
 
 document.querySelector("#year").textContent = new Date().getFullYear();
 
@@ -74,6 +76,13 @@ async function loadCases() {
 }
 
 search.addEventListener("input", () => renderCases(filterCases(search.value)));
+search.addEventListener("focus", () => {
+  const top = archiveHead.getBoundingClientRect().top + window.scrollY - siteHeader.offsetHeight - 4;
+  window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+});
+search.addEventListener("blur", () => {
+  if (!search.value.trim()) window.scrollTo({ top: 0, behavior: "smooth" });
+});
 
 const initialSearch = new URLSearchParams(location.search).get("search") || "";
 search.value = initialSearch;

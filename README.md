@@ -1,4 +1,4 @@
-# Mystery Universe — Static Supabase Edition
+# JasoosGiri — Static Supabase Edition
 
 A lightweight, mobile-first mystery investigation website designed to work on GitHub Pages / other static hosts with Supabase for PostgreSQL, Storage, and Auth.
 
