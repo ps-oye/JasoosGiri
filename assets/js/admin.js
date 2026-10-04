@@ -188,7 +188,8 @@ async function uploadCaseImage(file, slug) {
 
 async function deleteStoragePath(path) {
   if (!path) return;
-  await supabase.storage.from("case-images").remove([path]);
+  const { error } = await supabase.storage.from("case-images").remove([path]);
+  if (error) throw error;
 }
 
 async function saveCase() {
@@ -264,12 +265,50 @@ async function loadAdminCases() {
         <strong>${escapeHtml(item.title)}</strong>
         <small>${escapeHtml(item.status)} · schema v${escapeHtml(item.schema_version ?? "?")}</small>
       </div>
-      <button class="ghost-btn small" type="button" data-edit-id="${escapeHtml(item.id)}">Edit</button>
+      <div class="admin-case-actions">
+        <button class="ghost-btn small" type="button" data-edit-id="${escapeHtml(item.id)}">Edit</button>
+        <button class="ghost-btn small danger-btn" type="button" data-delete-id="${escapeHtml(item.id)}">Delete</button>
+      </div>
     </div>
   `).join("") || `<div class="muted">No cases yet.</div>`;
   list.querySelectorAll("[data-edit-id]").forEach((button) => button.addEventListener("click", () => {
     const found = data.find((item) => item.id === button.dataset.editId);
     if (found) loadCaseIntoForm(found);
+  }));
+  list.querySelectorAll("[data-delete-id]").forEach((button) => button.addEventListener("click", async () => {
+    const row = data.find((item) => item.id === button.dataset.deleteId);
+    if (!row || !window.confirm(`Delete Case #${String(row.case_number).padStart(3, "0")} — "${row.title}"? This cannot be undone.`)) return;
+
+    const rowElement = button.closest(".admin-case-row");
+    rowElement.querySelectorAll("button").forEach((action) => { action.disabled = true; });
+    saveMessage.textContent = "Deleting case…";
+
+    try {
+      const { data: deleted, error } = await supabase
+        .from("cases")
+        .delete()
+        .eq("id", row.id)
+        .select("id")
+        .maybeSingle();
+      if (error) throw error;
+      if (!deleted) throw new Error("The case was not deleted. Refresh the list and try again.");
+
+      let cleanupWarning = "";
+      if (row.image_path) {
+        try {
+          await deleteStoragePath(row.image_path);
+        } catch (error) {
+          cleanupWarning = ` The case image could not be deleted from storage: ${error.message}`;
+        }
+      }
+
+      if ($("edit-id").value === row.id) resetForm();
+      await loadAdminCases();
+      saveMessage.textContent = `Case #${String(row.case_number).padStart(3, "0")} deleted.${cleanupWarning}`;
+    } catch (error) {
+      saveMessage.textContent = `Delete failed: ${error.message}`;
+      rowElement.querySelectorAll("button").forEach((action) => { action.disabled = false; });
+    }
   }));
 }
 

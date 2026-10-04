@@ -69,6 +69,7 @@ Open `/admin.html`.
 - Select a crime-scene image. The browser resizes it to max 1600px and converts it to compressed WebP before upload.
 - Enter the YouTube answer URL.
 - Save the case.
+- Use **Delete** beside a case to permanently remove it from the database and delete its uploaded image. Confirm the prompt to continue.
 
 The public site fetches only published cases.
 

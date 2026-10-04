@@ -61,7 +61,10 @@ function renderGuess(caseRow, caseData) {
       <p>Your final guess is recorded.</p>
       ${videoId ? `
         <a class="answer-video" href="${escapeHtml(caseRow.youtube_url)}" target="_blank" rel="noopener noreferrer">
-          <img src="https://img.youtube.com/vi/${escapeHtml(videoId)}/hqdefault.jpg" alt="Answer video thumbnail" loading="lazy">
+          <img src="https://img.youtube.com/vi/${escapeHtml(videoId)}/maxresdefault.jpg" 
+              alt="Answer video thumbnail" 
+              loading="lazy"
+              onerror="this.src='https://img.youtube.com/vi/${escapeHtml(videoId)}/hqdefault.jpg'">
           <span class="video-overlay">▶ WATCH THE ANSWER</span>
         </a>
       ` : `<p class="muted">The answer video has not been attached to this case yet.</p>`}
