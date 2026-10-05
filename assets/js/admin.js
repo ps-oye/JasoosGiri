@@ -159,16 +159,29 @@ function enterAdmin(user) {
 async function compressImage(file) {
   if (!file) return null;
   const bitmap = await createImageBitmap(file);
-  const maxSide = 1600;
-  const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
+  const width = 1080;
+  const height = 1920;
+  const targetRatio = width / height;
+  const sourceRatio = bitmap.width / bitmap.height;
+  const sourceWidth = sourceRatio > targetRatio ? bitmap.height * targetRatio : bitmap.width;
+  const sourceHeight = sourceRatio > targetRatio ? bitmap.height : bitmap.width / targetRatio;
+  const sourceX = (bitmap.width - sourceWidth) / 2;
+  const sourceY = (bitmap.height - sourceHeight) / 2;
   const canvas = document.createElement("canvas");
-  canvas.width = Math.max(1, Math.round(bitmap.width * scale));
-  canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+  canvas.width = width;
+  canvas.height = height;
   const ctx = canvas.getContext("2d", { alpha: false });
+  if (!ctx) throw new Error("Could not prepare the case image for upload.");
   ctx.fillStyle = "#0b0b12";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-  return await new Promise((resolve, reject) => canvas.toBlob(resolve, "image/webp", 0.78));
+  ctx.drawImage(bitmap, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, width, height);
+  bitmap.close();
+  return await new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) resolve(blob);
+      else reject(new Error("Could not compress the case image."));
+    }, "image/webp", 0.78);
+  });
 }
 
 async function uploadCaseImage(file, slug) {

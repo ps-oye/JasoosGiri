@@ -66,7 +66,7 @@ Open `/admin.html`.
 - Paste the case JSON generated from `case-template.json`.
 - Click **Validate JSON**.
 - Click **Preview**.
-- Select a crime-scene image. The browser resizes it to max 1600px and converts it to compressed WebP before upload.
+- Select a crime-scene image. The browser center-crops it to 1080 × 1920 (9:16) and converts it to compressed WebP before upload.
 - Enter the YouTube answer URL.
 - Save the case.
 - Use **Delete** beside a case to permanently remove it from the database and delete its uploaded image. Confirm the prompt to continue.
@@ -111,9 +111,10 @@ This is an engagement lock, not a security boundary. Users can clear local stora
 
 Images are stored in Supabase Storage, not in PostgreSQL. The case row contains only `image_path` and `image_url`.
 
-The admin browser compresses images to WebP before upload:
+The admin browser crops and compresses images to WebP before upload:
 
-- max dimension: 1600px
+- dimensions: 1080 × 1920 (9:16)
+- crop: centered to fill the target ratio
 - quality: ~0.78
 - long-lived cache header
 
